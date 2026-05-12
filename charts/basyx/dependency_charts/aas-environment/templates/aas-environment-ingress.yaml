@@ -40,7 +40,6 @@ spec:
   {{- with .Values.ingress.ingressClassName }}
   ingressClassName: {{ . }}
   {{- end }}
-  {{- if .Values.ingress.tls.enabled }}
   tls:
   {{- range .Values.ingress.tls }}
   - hosts:
