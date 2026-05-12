@@ -59,6 +59,10 @@ spec:
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: {{ .Values.image.name }}      
+        
+        {{- if index .Values.config "basyx-infra.yaml" }}
+        env: []
+        {{- else }}
         env:
         - name: AAS_REPO_PATH
           value: {{ .Values.config.aasRepoUrl | quote }}
@@ -78,6 +82,7 @@ spec:
           value: {{ .Values.config.keycloakRealm }}
         - name: KEYCLOAK_CLIENT_ID
           value: {{ .Values.config.keycloakClientId }}
+        {{- end }}
         # - name: CHOCKIDAR_USEPOLLING
         #   value: "true"
         # - name: VITE_PRIMARY_COLOR
@@ -97,12 +102,22 @@ spec:
         - mountPath: /app/src/UserPlugins/
           name: plugins-volume
         {{- end }}
+        {{- if index .Values.config "basyx-infra.yaml" }}
+        - mountPath: /
+          name: {{ template "aas-web-ui.fullname" $ }}-basyx-infra-config
+        {{- end }}
+        
       restartPolicy: Always
       volumes:
       {{- if .Values.logo.relativePath }}
       - name: {{ template "aas-web-ui.fullname" $ }}-logo
         configMap:
           name: {{ template "aas-web-ui.fullname" $ }}-logo
+      {{- end }}
+      {{- if index .Values.config "basyx-infra.yaml" }}
+      - name: {{ template "aas-web-ui.fullname" $ }}-basyx-infra-config
+        configMap:
+          name: {{ template "aas-web-ui.fullname" $ }}-basyx-infra-config
       {{- end }}
       {{- if .Values.externalPlugins.enabled }}
       - name: plugins-volume
