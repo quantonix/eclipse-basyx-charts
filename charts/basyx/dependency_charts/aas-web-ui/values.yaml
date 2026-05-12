@@ -56,6 +56,39 @@ config:
   keycloakUrl: https://keycloak.basyx.local
   keycloakRealm: BaSyx
   keycloakClientId: basyx-web-ui
+  basyx-infra.yaml: |- # yaml
+    infrastructures:
+      default: local
+
+      local:
+        name: Local BaSyx Memory Stack
+
+        components:
+          # DTR exposes both AAS Registry and AAS Discovery endpoints.
+          # These URLs are used by the browser, so use localhost, not Docker service names.
+          aasRegistry:
+            baseUrl: "http://aas-registry:8080"
+            hasDiscoveryIntegration: true
+
+          aasDiscovery:
+            baseUrl: "http://aas-discovery:8080"
+
+          # AAS Environment aggregates AAS Repository, Submodel Repository,
+          # and Concept Description Repository under the same base URL.
+          aasRepository:
+            baseUrl: "http://aas-environment:8080"
+            hasRegistryIntegration: true
+
+          submodelRepository:
+            baseUrl: "http://aas-environment:8080"
+            hasRegistryIntegration: true
+
+          conceptDescriptionRepository:
+            baseUrl: "http://aas-environment:8080"
+
+        security:
+          type: none
+  
 
 logo:
   relativePath: null
