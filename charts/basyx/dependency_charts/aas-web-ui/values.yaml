@@ -56,7 +56,7 @@ config:
   keycloakUrl: https://keycloak.basyx.local
   keycloakRealm: BaSyx
   keycloakClientId: basyx-web-ui
-  basyx-infra.yaml: |- # yaml
+  basyx-infra.yml: |- # yaml
     infrastructures:
       default: local
 

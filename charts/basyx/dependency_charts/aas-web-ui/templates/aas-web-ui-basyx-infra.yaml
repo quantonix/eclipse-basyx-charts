@@ -1,4 +1,4 @@
-{{- if index .Values.config "basyx-infra.yaml" }}
+{{- if index .Values.config "basyx-infra.yml" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,6 +6,6 @@ metadata:
   labels:
     {{- include "aas-web-ui.labels" . | nindent 4 }}
 data:
-  basyx-infra.yaml: |
-{{- index .Values.config "basyx-infra.yaml" | nindent 4 }}
+  basyx-infra.yml: |
+{{- index .Values.config "basyx-infra.yml" | nindent 4 }}
 {{ end -}}

@@ -1263,9 +1263,9 @@ aas-web-ui:
     ## Depends on: @param keycloak.extraVolumes (Keycloak Realm Import)
     ##
     keycloakClientId: basyx-web-ui
-    ## @param aas-web-ui.config.basyx-infra.yaml basyx-infra.yaml for infrastructure configuration
+    ## @param aas-web-ui.config.basyx-infra.yml basyx-infra.yml for infrastructure configuration
     ##
-    basyx-infra.yaml: |- # yaml
+    basyx-infra.yml: |- # yaml
       infrastructures:
         default: local
 
