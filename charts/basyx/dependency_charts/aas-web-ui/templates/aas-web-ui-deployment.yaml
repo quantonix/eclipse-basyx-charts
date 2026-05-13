@@ -60,7 +60,7 @@ spec:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: {{ .Values.image.name }}      
         
-        {{- if index .Values.config "basyx-infra.yaml" }}
+        {{- if index .Values.config "basyx-infra.yml" }}
         env: []
         {{- else }}
         env:
@@ -102,10 +102,10 @@ spec:
         - mountPath: /app/src/UserPlugins/
           name: plugins-volume
         {{- end }}
-        {{- if index .Values.config "basyx-infra.yaml" }}
-        - mountPath: /basyx-infra.yaml
+        {{- if index .Values.config "basyx-infra.yml" }}
+        - mountPath: /basyx-infra.yml
           name: {{ template "aas-web-ui.fullname" $ }}-basyx-infra-config
-          subPath: basyx-infra.yaml
+          subPath: basyx-infra.yml
         {{- end }}
         
       restartPolicy: Always
@@ -115,7 +115,7 @@ spec:
         configMap:
           name: {{ template "aas-web-ui.fullname" $ }}-logo
       {{- end }}
-      {{- if index .Values.config "basyx-infra.yaml" }}
+      {{- if index .Values.config "basyx-infra.yml" }}
       - name: {{ template "aas-web-ui.fullname" $ }}-basyx-infra-config
         configMap:
           name: {{ template "aas-web-ui.fullname" $ }}-basyx-infra-config
