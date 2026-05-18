@@ -1227,6 +1227,42 @@ aas-web-ui:
   ## AAS Web UI config parameters
   ##
   config:
+    ## @param aas-web-ui.config.basyx-infra.yml basyx-infra.yml for infrastructure configuration
+    ##
+    basyx-infra.yml: |- # yaml
+      infrastructures:
+        default: local
+
+        local:
+          name: Local BaSyx Memory Stack
+
+          components:
+            # DTR exposes both AAS Registry and AAS Discovery endpoints.
+            # These URLs are used by the browser, so use localhost, not Docker service names.
+            aasRegistry:
+              baseUrl: "http://aas-registry:8080"
+              hasDiscoveryIntegration: true
+
+            aasDiscovery:
+              baseUrl: "http://aas-discovery:8080"
+
+            # AAS Environment aggregates AAS Repository, Submodel Repository,
+            # and Concept Description Repository under the same base URL.
+            aasRepository:
+              baseUrl: "http://aas-environment:8080"
+              hasRegistryIntegration: true
+
+            submodelRepository:
+              baseUrl: "http://aas-environment:8080"
+              hasRegistryIntegration: true
+
+            conceptDescriptionRepository:
+              baseUrl: "http://aas-environment:8080"
+
+          security:
+            type: none
+
+    ## Important: The following configuration values are used only if basyx-infra.yml is not provided.
     ## @param aas-web-ui.config.aasRepoUrl URL of AAS Repository
     ## Depends on:   @param aas-environment.enabled, (@param aas-environment.ingress.host or @param aas-environment.apirule.host)
     ##
@@ -1263,40 +1299,10 @@ aas-web-ui:
     ## Depends on: @param keycloak.extraVolumes (Keycloak Realm Import)
     ##
     keycloakClientId: basyx-web-ui
-    ## @param aas-web-ui.config.basyx-infra.yml basyx-infra.yml for infrastructure configuration
-    ##
-    basyx-infra.yml: |- # yaml
-      infrastructures:
-        default: local
 
-        local:
-          name: Local BaSyx Memory Stack
+  extraEnv: {}
+    # EXTRA_ENV_VAR: extra_env_var_value
 
-          components:
-            # DTR exposes both AAS Registry and AAS Discovery endpoints.
-            # These URLs are used by the browser, so use localhost, not Docker service names.
-            aasRegistry:
-              baseUrl: "http://aas-registry:8080"
-              hasDiscoveryIntegration: true
-
-            aasDiscovery:
-              baseUrl: "http://aas-discovery:8080"
-
-            # AAS Environment aggregates AAS Repository, Submodel Repository,
-            # and Concept Description Repository under the same base URL.
-            aasRepository:
-              baseUrl: "http://aas-environment:8080"
-              hasRegistryIntegration: true
-
-            submodelRepository:
-              baseUrl: "http://aas-environment:8080"
-              hasRegistryIntegration: true
-
-            conceptDescriptionRepository:
-              baseUrl: "http://aas-environment:8080"
-
-          security:
-            type: none
 
   ## AAS Web UI external plugins parameters
   ##

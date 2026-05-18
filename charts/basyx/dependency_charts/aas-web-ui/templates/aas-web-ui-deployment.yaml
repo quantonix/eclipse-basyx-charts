@@ -25,6 +25,8 @@
 #################################################################################
 
 ---
+{{- $hasNoInfra := not (index .Values.config "basyx-infra.yml") }}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -59,11 +61,9 @@ spec:
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: {{ .Values.image.name }}      
-        
-        {{- if index .Values.config "basyx-infra.yml" }}
-        env: []
-        {{- else }}
+        {{- if or $hasNoInfra .Values.extraEnv }}
         env:
+        {{- if $hasNoInfra }}
         - name: AAS_REPO_PATH
           value: {{ .Values.config.aasRepoUrl | quote }}
         - name: SUBMODEL_REPO_PATH
@@ -77,11 +77,16 @@ spec:
         - name: SUBMODEL_REGISTRY_PATH
           value: {{ .Values.config.submodelRegistryUrl | quote }}
         - name: KEYCLOAK_URL
-          value: {{ .Values.config.keycloakUrl }}
+          value: {{ .Values.config.keycloakUrl | quote }}
         - name: KEYCLOAK_REALM
-          value: {{ .Values.config.keycloakRealm }}
+          value: {{ .Values.config.keycloakRealm | quote }}
         - name: KEYCLOAK_CLIENT_ID
-          value: {{ .Values.config.keycloakClientId }}
+          value: {{ .Values.config.keycloakClientId | quote }}
+        {{- end }}
+        {{- range $key, $value := .Values.extraEnv }}
+        - name: {{ $key | quote }}
+          value: {{ $value | quote }}
+        {{- end }}
         {{- end }}
         # - name: CHOCKIDAR_USEPOLLING
         #   value: "true"
